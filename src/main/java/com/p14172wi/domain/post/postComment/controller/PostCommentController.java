@@ -3,6 +3,7 @@ package com.p14172wi.domain.post.postComment.controller;
 import com.p14172wi.domain.post.postComment.dto.PostCommentRequest;
 import com.p14172wi.domain.post.postComment.dto.PostCommentDto;
 import com.p14172wi.domain.post.postComment.service.PostCommentService;
+import com.p14172wi.global.rsData.RsData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,20 +34,22 @@ public class PostCommentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PostCommentDto create(@PathVariable Long postId, @RequestBody PostCommentRequest request) {
-        return commentService.create(postId, request);
+    public RsData<PostCommentDto> create(@PathVariable Long postId, @RequestBody PostCommentRequest request) {
+        PostCommentDto comment = commentService.create(postId, request);
+        return new RsData<>("201-1", "%d번 댓글이 작성되었습니다.".formatted(comment.id()), comment);
     }
 
     @PutMapping("/{commentId}")
-    public PostCommentDto update(@PathVariable Long postId,
-                                  @PathVariable Long commentId,
-                                  @RequestBody PostCommentRequest request) {
-        return commentService.update(postId, commentId, request);
+    public RsData<PostCommentDto> update(@PathVariable Long postId,
+                                         @PathVariable Long commentId,
+                                         @RequestBody PostCommentRequest request) {
+        PostCommentDto comment = commentService.update(postId, commentId, request);
+        return new RsData<>("200-1", "%d번 댓글이 수정되었습니다.".formatted(commentId), comment);
     }
 
     @DeleteMapping("/{commentId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long postId, @PathVariable Long commentId) {
+    public RsData<Void> delete(@PathVariable Long postId, @PathVariable Long commentId) {
         commentService.delete(postId, commentId);
+        return new RsData<>("200-1", "%d번 댓글이 삭제되었습니다.".formatted(commentId));
     }
 }
