@@ -1,22 +1,19 @@
+# 모든 환경에 공통으로 적용되는 설정
+# 환경별 설정은 application-{profile}.yaml 에 둔다 (dev, test)
 spring:
   application:
     name: p14172-wi
+
+  profiles:
+    # 따로 지정하지 않으면 dev 로 실행 (SPRING_PROFILES_ACTIVE 로 변경 가능)
+    active: dev
 
   # 프로젝트 루트의 .env(커밋 제외)에서 DB_USERNAME, DB_PASSWORD 등을 읽음
   config:
     import: optional:file:.env[.properties]
 
-  datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3306/p14172wi?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&createDatabaseIfNotExist=true}
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
   jpa:
-    hibernate:
-      ddl-auto: update
     open-in-view: false
     properties:
       hibernate:
         format_sql: true
-    show-sql: true
