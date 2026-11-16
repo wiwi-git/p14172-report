@@ -32,6 +32,10 @@ public class PostCommentService {
                 .toList();
     }
 
+    public PostCommentDto findById(Long postId, Long commentId) {
+        return PostCommentDto.from(getComment(postId, commentId));
+    }
+
     @Transactional
     public PostCommentDto create(Long postId, PostCommentRequest request) {
         Post post = getPost(postId);
